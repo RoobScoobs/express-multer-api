@@ -5,10 +5,17 @@ const fs = require('fs');
 let filename = process.argv[2] || ''; // <-- '' Adds a default (empty strings) if no argument is passed
 
 // signature for file system readfile
-fs.readFile(filename, (error, data) => {
-  if (error) {
-    return console.error(error);
-  }
+const readFile = (filename) => {
+  return new Promise((resolve,reject) => {
+    fs.readFile(filename, (error, data) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(data);
+    });
+  });
+};
 
-  console.log(`${filename} is ${data.length} is bytes long`);
-})
+readFile(filename)
+.then((data) => console.log(`${filename} is ${data.length} bytes long.`))
+.catch(console.error);
